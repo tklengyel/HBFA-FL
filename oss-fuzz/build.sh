@@ -37,6 +37,7 @@ build_fuzzer() {
 }
 
 cd $SRC/edk2
+patch -p1 < ../edk2-bugfixes/*.patch || :
 make -C BaseTools
 source edksetup.sh
 cd ..
