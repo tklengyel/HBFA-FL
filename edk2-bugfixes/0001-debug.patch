@@ -1,0 +1,47 @@
+From 832e18d2bb6deb11902f4898728a4bb21a412096 Mon Sep 17 00:00:00 2001
+From: Tamas K Lengyel <tamas.lengyel@intel.com>
+Date: Fri, 13 Sep 2024 13:27:26 +0000
+Subject: [PATCH] debug
+
+---
+ .../Universal/Disk/UdfDxe/FileSystemOperations.c   | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/MdeModulePkg/Universal/Disk/UdfDxe/FileSystemOperations.c b/MdeModulePkg/Universal/Disk/UdfDxe/FileSystemOperations.c
+index 86020de6e0..18be4fc68e 100644
+--- a/MdeModulePkg/Universal/Disk/UdfDxe/FileSystemOperations.c
++++ b/MdeModulePkg/Universal/Disk/UdfDxe/FileSystemOperations.c
+@@ -1984,6 +1984,7 @@ ReadDirectoryEntry (
+   UDF_FILE_IDENTIFIER_DESCRIPTOR  *FileIdentifierDesc;
+ 
+   if (ReadDirInfo->DirectoryData == NULL) {
++
+     //
+     // The directory's recorded data has not been read yet. So let's cache it
+     // into memory and the next calls won't need to read it again.
+@@ -2007,9 +2008,22 @@ ReadDirectoryEntry (
+     //
+     ReadDirInfo->DirectoryData   = ReadFileInfo.FileData;
+     ReadDirInfo->DirectoryLength = ReadFileInfo.ReadLength;
++
++    DEBUG ((
++          DEBUG_INFO,
++          "%a: ReadDirInfo->directorydata is NULL\n",
++          __func__
++    ));
++
+   }
+ 
+   do {
++    DEBUG ((
++          DEBUG_INFO,
++          "%a: FidOffset is %lx Length is %lx NULL\n",
++          __func__, ReadDirInfo->FidOffset, ReadDirInfo->DirectoryLength
++    ));
++
+     if (ReadDirInfo->FidOffset >= ReadDirInfo->DirectoryLength) {
+       //
+       // There are no longer FIDs for this directory. By returning
+-- 
+2.34.1
+
